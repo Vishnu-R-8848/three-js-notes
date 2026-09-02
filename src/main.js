@@ -18,3 +18,10 @@ const material = new THREE.MeshBasicMaterial({
 const cube = new THREE.Mesh(geometry, material);
 
 const canvas = document.querySelector("#webgl");
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+});
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+renderer.render(scene, camera);
