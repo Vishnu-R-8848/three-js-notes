@@ -17,6 +17,9 @@ const material = new THREE.MeshBasicMaterial({
 });
 const cube = new THREE.Mesh(geometry, material);
 
+scene.add(cube)
+camera.position.z = 5;
+
 const canvas = document.querySelector("#webgl");
 const renderer = new THREE.WebGLRenderer({
   canvas,
