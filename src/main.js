@@ -16,3 +16,5 @@ const material = new THREE.MeshBasicMaterial({
   color: "red",
 });
 const cube = new THREE.Mesh(geometry, material);
+
+const canvas = document.querySelector("#webgl");
