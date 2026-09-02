@@ -10,3 +10,5 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000,
 ); // field of view, aspect ratio, near plane, far plane
+
+const cube = new THREE.Mesh(_geometry,_material)
