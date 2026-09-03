@@ -24,23 +24,14 @@ const material = new THREE.MeshBasicMaterial({
   color: "red",
   wireframe: true,
 });
-const material2 = new THREE.MeshBasicMaterial({
-  color: "green",
-  wireframe: true,
-});
 const cube = new THREE.Mesh(geometry, material);
-const cube2 = new THREE.Mesh(geometry, material2);
 
 scene.add(cube);
-scene.add(cube2);
 
 camera.position.z = 5;
 camera.position.x = 3;
 camera.position.y = 1;
 camera.lookAt(new THREE.Vector3(1, 1, 1));
-
-cube.position.x = -1.5;
-cube2.position.x = 1.5;
 
 const canvas = document.querySelector("#webgl");
 const renderer = new THREE.WebGLRenderer({
@@ -51,6 +42,8 @@ renderer.setSize(size.width, size.height);
 renderer.setPixelRatio(Math.max(2, window.devicePixelRatio));
 
 const controls = new OrbitControls(camera, renderer.domElement);
+
+controls.enableDamping = true;
 
 window.addEventListener("resize", () => {
   size.width = window.innerWidth;
@@ -64,9 +57,9 @@ window.addEventListener("resize", () => {
 const animate = () => {
   const elapsedTime = time.getElapsedTime();
 
-  // cube.rotation.x = elapsedTime;
-  // cube.rotation.y = elapsedTime;
-  // cube.rotation.z = elapsedTime;
+  cube.rotation.x = elapsedTime;
+  cube.rotation.y = elapsedTime;
+  cube.rotation.z = elapsedTime;
 
   controls.update();
   renderer.render(scene, camera);
