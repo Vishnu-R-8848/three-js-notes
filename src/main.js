@@ -55,11 +55,11 @@ window.addEventListener("resize", () => {
 });
 
 const animate = () => {
-  const elapsedTime = time.getElapsedTime();
+  const delta = time.getDelta();
 
-  cube.rotation.x = elapsedTime;
-  cube.rotation.y = elapsedTime;
-  cube.rotation.z = elapsedTime;
+  cube.rotation.x = delta;
+  cube.rotation.y = delta;
+  cube.rotation.z = delta;
 
   controls.update();
   renderer.render(scene, camera);
