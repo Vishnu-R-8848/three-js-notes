@@ -31,3 +31,13 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 renderer.render(scene, camera);
+
+
+const animate = () => {
+  camera.position.x += 0.5
+  renderer.render(scene, camera);
+  // requestAnimationFrame(animate)
+};
+// animate()
+
+setInterval(animate, 100);
