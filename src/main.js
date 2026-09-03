@@ -11,6 +11,8 @@ const camera = new THREE.PerspectiveCamera(
   1000,
 ); // field of view, aspect ratio, near plane, far plane
 
+const time = new THREE.Clock();
+
 const geometry = new THREE.BoxGeometry(1, 1, 1); // width, height, depth
 const material = new THREE.MeshBasicMaterial({
   color: "red",
@@ -32,9 +34,13 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 const animate = () => {
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-  cube.rotation.z += 0.01;
+
+  const elapsedTime = time.getElapsedTime();
+  
+
+  cube.rotation.x = elapsedTime;
+  cube.rotation.y = elapsedTime;
+  cube.rotation.z = elapsedTime;
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 };
