@@ -14,6 +14,7 @@ const camera = new THREE.PerspectiveCamera(
 const geometry = new THREE.BoxGeometry(1, 1, 1); // width, height, depth
 const material = new THREE.MeshBasicMaterial({
   color: "red",
+  wireframe: true,
 });
 const cube = new THREE.Mesh(geometry, material);
 
@@ -30,14 +31,11 @@ const renderer = new THREE.WebGLRenderer({
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-renderer.render(scene, camera);
-
-
 const animate = () => {
-  camera.position.x += 0.5
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
+  cube.rotation.z += 0.01;
   renderer.render(scene, camera);
-  // requestAnimationFrame(animate)
+  requestAnimationFrame(animate);
 };
-// animate()
-
-setInterval(animate, 100);
+animate();
