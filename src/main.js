@@ -55,7 +55,7 @@ window.addEventListener("resize", () => {
 });
 
 const animate = () => {
-  const delta = time.getDelta();
+  const delta = time.getElapsedTime();
 
   cube.rotation.x = delta;
   cube.rotation.y = delta;
