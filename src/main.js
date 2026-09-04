@@ -19,7 +19,7 @@ const camera = new THREE.PerspectiveCamera(
 
 const time = new THREE.Clock();
 
-const geometry = new THREE.BoxGeometry(1, 1, 1); // width, height, depth
+const geometry = new THREE.SphereGeometry(1,16,16) // width, height, depth
 const material = new THREE.MeshBasicMaterial({
   color: "red",
   wireframe: true,
@@ -57,9 +57,9 @@ window.addEventListener("resize", () => {
 const animate = () => {
   const delta = time.getElapsedTime();
 
-  cube.rotation.x = delta;
-  cube.rotation.y = delta;
-  cube.rotation.z = delta;
+  // cube.rotation.x = delta;
+  // cube.rotation.y = delta;
+  // cube.rotation.z = delta;
 
   controls.update();
   renderer.render(scene, camera);
