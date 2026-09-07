@@ -10,16 +10,18 @@ const size = {
   height: window.innerHeight,
 };
 
-const camera = new THREE.PerspectiveCamera(
-  75,
-  size.width / size.height,
-  0.1,
+const camera = new THREE.OrthographicCamera(
+  size.width / -2,
+  size.width / 2,
+  size.height / 2,
+  size.height / -2,
+  1,
   1000,
 ); // field of view, aspect ratio, near plane, far plane
 
 const time = new THREE.Clock();
 
-const geometry = new THREE.SphereGeometry(1,16,16) // width, height, depth
+const geometry = new THREE.BoxGeometry(1, 1, 1); // width, height, depth
 const material = new THREE.MeshBasicMaterial({
   color: "red",
   wireframe: true,
@@ -53,6 +55,9 @@ window.addEventListener("resize", () => {
   camera.updateProjectionMatrix();
   renderer.setSize(size.width, size.height);
 });
+
+camera.zoom = 114;
+camera.updateProjectionMatrix();
 
 const animate = () => {
   const delta = time.getElapsedTime();
