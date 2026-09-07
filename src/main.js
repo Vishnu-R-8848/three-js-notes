@@ -20,7 +20,10 @@ const camera = new THREE.PerspectiveCamera(
 const time = new THREE.Clock();
 
 const geometry = new THREE.BoxGeometry(1, 1, 1); // width, height, depth
-const material = new THREE.MeshNormalMaterial();
+const material = new THREE.MeshBasicMaterial({
+  color: "red",
+  wireframe: true,
+});
 const cube = new THREE.Mesh(geometry, material);
 
 scene.add(cube);
