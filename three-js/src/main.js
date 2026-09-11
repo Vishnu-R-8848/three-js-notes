@@ -2,7 +2,7 @@ import "./style.css";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-// --- 1. Scene & Canvas ---
+// Scene & Canvas
 const canvas = document.querySelector("#webgl");
 const scene = new THREE.Scene();
 
@@ -11,7 +11,7 @@ const sizes = {
   height: window.innerHeight,
 };
 
-// --- 2. Camera ---
+// Camera
 const camera = new THREE.PerspectiveCamera(
   75,
   sizes.width / sizes.height,
@@ -21,39 +21,46 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.set(2, 3, 4);
 scene.add(camera);
 
-// --- 3. Mesh ---
+// Texture & Mesh
+const textureLoader = new THREE.TextureLoader();
+const texture = textureLoader.load(
+  "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1000&auto=format&fit=crop"
+);
+
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 
-// Standard material for reacting to lights (uncomment to test with lights)
-// const material = new THREE.MeshStandardMaterial({ color: 0xff0000, roughness: 0.3 });
+// Unlit material showing the texture (no lights needed)
+const material = new THREE.MeshBasicMaterial({ 
+  map: texture 
+});
 
-// Default boilerplate unlit material (visible without lights)
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+// If you want to use lights later, switch to:
+// const material = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.3 });
 
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
-// --- 4. Lights & Helpers (Commented out) ---
+// Lights & Helpers (Commented out)
 
-// // A. AmbientLight (Fill light - has no helper)
+// AmbientLight (Fill light - has no helper)
 // const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 // scene.add(ambientLight);
 
-// // B. DirectionalLight (Sun rays) + Helper
+// DirectionalLight (Sun rays) + Helper
 // const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
 // directionalLight.position.set(3, 4, 2);
 // scene.add(directionalLight);
 // const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 0.8);
 // scene.add(directionalLightHelper);
 
-// // C. PointLight (Bulb) + Helper
+// PointLight (Bulb) + Helper
 // const pointLight = new THREE.PointLight(0xffffff, 10, 20, 2);
 // pointLight.position.set(2, 2, 2);
 // scene.add(pointLight);
 // const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.3);
 // scene.add(pointLightHelper);
 
-// // D. SpotLight (Cone) + Helper
+// SpotLight (Cone) + Helper
 // const spotLight = new THREE.SpotLight(0xffffff, 15, 20, Math.PI / 6, 0.3, 1);
 // spotLight.position.set(0, 5, 2);
 // spotLight.target = cube;
@@ -61,13 +68,13 @@ scene.add(cube);
 // const spotLightHelper = new THREE.SpotLightHelper(spotLight);
 // scene.add(spotLightHelper);
 
-// // E. HemisphereLight (Sky vs Ground) + Helper
+// HemisphereLight (Sky vs Ground) + Helper
 // const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
 // scene.add(hemisphereLight);
 // const hemisphereLightHelper = new THREE.HemisphereLightHelper(hemisphereLight, 0.5);
 // scene.add(hemisphereLightHelper);
 
-// --- 5. Renderer ---
+// Renderer
 const renderer = new THREE.WebGLRenderer({
   canvas,
   antialias: true,
@@ -75,11 +82,11 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-// --- 6. Controls ---
+// Controls
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 
-// --- 7. Time & Loop ---
+// Time & Loop
 const timer = new THREE.Timer();
 
 const animate = (timestamp) => {
@@ -90,7 +97,7 @@ const animate = (timestamp) => {
   cube.rotation.y += 0.5 * delta;
   cube.rotation.z += 0.5 * delta;
 
-  // // Helper updates (uncomment when testing lights with moving targets)
+  // Helper updates (uncomment when testing lights with moving targets)
   // directionalLightHelper.update();
   // spotLightHelper.update();
 
@@ -102,7 +109,7 @@ const animate = (timestamp) => {
 
 window.requestAnimationFrame(animate);
 
-// --- 8. Event Listeners ---
+// Event Listeners
 window.addEventListener("resize", () => {
   sizes.width = window.innerWidth;
   sizes.height = window.innerHeight;
