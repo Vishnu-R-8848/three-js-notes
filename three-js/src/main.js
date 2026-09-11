@@ -16,22 +16,27 @@ const camera = new THREE.PerspectiveCamera(
   75,
   size.width / size.height,
   0.1,
-  1000
+  1000,
 );
 camera.position.set(2, 2, 4);
 
-// 1. Lights that ensure it cannot be pitch black
-const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
-scene.add(ambientLight);
+// // 1. Lights that ensure it cannot be pitch black
+// const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+// scene.add(ambientLight);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
 directionalLight.position.set(3, 4, 2);
 scene.add(directionalLight);
 
+const directionalLightHelper = new THREE.DirectionalLightHelper(
+  directionalLight,
+);
+scene.add(directionalLightHelper);
+
 // 2. Visible test cube
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 const material = new THREE.MeshStandardMaterial({
-  color: 0x00ff88, // Neon green so it's impossible to miss
+  color: "red", // Neon green so it's impossible to miss
   roughness: 0.3,
 });
 const cube = new THREE.Mesh(geometry, material);
