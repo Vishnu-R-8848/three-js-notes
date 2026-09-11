@@ -1,9 +1,11 @@
 import "./style.css";
-
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const scene = new THREE.Scene();
+
+// Give the scene a gray background so you can clearly tell the canvas is running
+scene.background = new THREE.Color("#1a1a1a");
 
 const size = {
   width: window.innerWidth,
@@ -14,35 +16,33 @@ const camera = new THREE.PerspectiveCamera(
   75,
   size.width / size.height,
   0.1,
-  1000,
-); // field of view, aspect ratio, near plane, far plane
+  1000
+);
+camera.position.set(2, 2, 4);
 
-const time = new THREE.Clock();
+// 1. Lights that ensure it cannot be pitch black
+const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+scene.add(ambientLight);
 
-const geometry = new THREE.BoxGeometry(1, 1, 1); // width, height, depth
-const material = new THREE.MeshBasicMaterial({
-  color: "red",
-  wireframe: true,
+const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+directionalLight.position.set(3, 4, 2);
+scene.add(directionalLight);
+
+// 2. Visible test cube
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshStandardMaterial({
+  color: 0x00ff88, // Neon green so it's impossible to miss
+  roughness: 0.3,
 });
 const cube = new THREE.Mesh(geometry, material);
-
 scene.add(cube);
 
-camera.position.z = 5;
-camera.position.x = 3;
-camera.position.y = 1;
-camera.lookAt(new THREE.Vector3(1, 1, 1));
-
 const canvas = document.querySelector("#webgl");
-const renderer = new THREE.WebGLRenderer({
-  canvas,
-});
-
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 renderer.setSize(size.width, size.height);
-renderer.setPixelRatio(Math.max(2, window.devicePixelRatio));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 const controls = new OrbitControls(camera, renderer.domElement);
-
 controls.enableDamping = true;
 
 window.addEventListener("resize", () => {
@@ -55,11 +55,8 @@ window.addEventListener("resize", () => {
 });
 
 const animate = () => {
-  const delta = time.getElapsedTime();
-
-  // cube.rotation.x = delta;
-  // cube.rotation.y = delta;
-  // cube.rotation.z = delta;
+  cube.rotation.y += 0.01;
+  cube.rotation.x += 0.005;
 
   controls.update();
   renderer.render(scene, camera);
