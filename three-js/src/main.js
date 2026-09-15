@@ -48,7 +48,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000,
 );
-camera.position.set(2, 3, 4);
+camera.position.set(-2, -1, 5);
 scene.add(camera);
 
 // Texture & Mesh
@@ -65,7 +65,18 @@ const material = new THREE.MeshStandardMaterial({
   metalness: 0.8, // metalness cranked up to visibly reflect the environment
 });
 
-const cube = new THREE.Mesh(geometry, material);
+const floorGeometry = new THREE.PlaneGeometry(10, 10, 10);
+const floorMaterial = new THREE.MeshStandardMaterial({
+  color: "white",
+  side: THREE.DoubleSide,
+});
+
+const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+floor.rotation.x = Math.PI / 2;
+floor.position.y = -2.53;
+scene.add(floor);
+
+// const cube = new THREE.Mesh(geometry, material);
 // scene.add(cube);
 
 // // Ambient Light
