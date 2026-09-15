@@ -1,6 +1,8 @@
 import "./style.css";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
+import heroImage from "./assets/hero-img.jpg";
 
 // Scene & Canvas
 const canvas = document.querySelector("#webgl");
@@ -11,68 +13,60 @@ const sizes = {
   height: window.innerHeight,
 };
 
+// Environment Map (HDR)
+const rgbeLoader = new RGBELoader();
+// Pass either a local HDR file (e.g., '/textures/environment.hdr') or a working CDN link:
+rgbeLoader.load("./envMap.hdr", (texture) => {
+  texture.mapping = THREE.EquirectangularReflectionMapping;
+  scene.environment = texture;
+  scene.background = texture;
+  // Optional: scene.background = texture; // if you want the HDRI visible in the skybox
+});
+
 // Camera
 const camera = new THREE.PerspectiveCamera(
   75,
   sizes.width / sizes.height,
   0.1,
-  1000
+  1000,
 );
 camera.position.set(2, 3, 4);
 scene.add(camera);
 
 // Texture & Mesh
 const textureLoader = new THREE.TextureLoader();
-const texture = textureLoader.load(
-  "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1000&auto=format&fit=crop"
-);
+const texture = textureLoader.load(heroImage);
+texture.colorSpace = THREE.SRGBColorSpace;
 
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 
-// Unlit material showing the texture (no lights needed)
-const material = new THREE.MeshBasicMaterial({ 
-  map: texture 
+// Standard material to react to directional light and environment reflections
+const material = new THREE.MeshStandardMaterial({
+  // map: texture,
+  roughness: 0.1,
+  metalness: 0.8, // metalness cranked up to visibly reflect the environment
 });
-
-// If you want to use lights later, switch to:
-// const material = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.3 });
 
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
-// Lights & Helpers (Commented out)
+// Ambient Light
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+scene.add(ambientLight);
 
-// AmbientLight (Fill light - has no helper)
-// const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-// scene.add(ambientLight);
+// Directional Light & Target
+const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+directionalLight.position.set(3, 4, 2);
+directionalLight.target = cube;
+scene.add(directionalLight.target);
+scene.add(directionalLight);
 
-// DirectionalLight (Sun rays) + Helper
-// const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-// directionalLight.position.set(3, 4, 2);
-// scene.add(directionalLight);
-// const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 0.8);
+// Directional Light Helper (kept commented out)
+const directionalLightHelper = new THREE.DirectionalLightHelper(
+  directionalLight,
+  0.8,
+);
 // scene.add(directionalLightHelper);
-
-// PointLight (Bulb) + Helper
-// const pointLight = new THREE.PointLight(0xffffff, 10, 20, 2);
-// pointLight.position.set(2, 2, 2);
-// scene.add(pointLight);
-// const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.3);
-// scene.add(pointLightHelper);
-
-// SpotLight (Cone) + Helper
-// const spotLight = new THREE.SpotLight(0xffffff, 15, 20, Math.PI / 6, 0.3, 1);
-// spotLight.position.set(0, 5, 2);
-// spotLight.target = cube;
-// scene.add(spotLight);
-// const spotLightHelper = new THREE.SpotLightHelper(spotLight);
-// scene.add(spotLightHelper);
-
-// HemisphereLight (Sky vs Ground) + Helper
-// const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
-// scene.add(hemisphereLight);
-// const hemisphereLightHelper = new THREE.HemisphereLightHelper(hemisphereLight, 0.5);
-// scene.add(hemisphereLightHelper);
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
@@ -96,10 +90,6 @@ const animate = (timestamp) => {
   cube.rotation.x += 0.5 * delta;
   cube.rotation.y += 0.5 * delta;
   cube.rotation.z += 0.5 * delta;
-
-  // Helper updates (uncomment when testing lights with moving targets)
-  // directionalLightHelper.update();
-  // spotLightHelper.update();
 
   controls.update();
   renderer.render(scene, camera);
