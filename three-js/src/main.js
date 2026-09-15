@@ -26,7 +26,7 @@ rgbeLoader.load("./envMap.hdr", (texture) => {
 // Floor
 const floor = new THREE.Mesh(
   new THREE.PlaneGeometry(10, 10),
-  new THREE.MeshStandardMaterial({ color: "white", side: THREE.DoubleSide })
+  new THREE.MeshStandardMaterial({ color: "white", side: THREE.DoubleSide }),
 );
 floor.rotation.x = -Math.PI / 2;
 floor.position.y = -2.53;
@@ -42,7 +42,7 @@ loader.load("./model.glb", (gltf) => {
 
   if (gltf.animations.length > 0) {
     mixer = new THREE.AnimationMixer(model);
-    mixer.clipAction(gltf.animations[0]).play();
+    mixer.clipAction(gltf.animations[12]).play();
   }
 
   scene.add(model);
@@ -52,12 +52,21 @@ loader.load("./model.glb", (gltf) => {
 });
 
 // Camera
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(
+  75,
+  sizes.width / sizes.height,
+  0.1,
+  1000,
+);
 camera.position.set(-2, -1, 5);
 scene.add(camera);
 
 // Renderer
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  antialias: true,
+  alpha: true,
+});
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
