@@ -1,1 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Wallpoet&display=swap");
 @import "tailwindcss";
+
+body {
+  background: #fdd57d;
+}
+
+.title {
+  font-family: "Wallpoet", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
