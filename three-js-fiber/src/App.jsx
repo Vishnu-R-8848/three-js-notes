@@ -4,7 +4,7 @@ import { BoxGeometry, Mesh, MeshBasicMaterial } from 'three'
 
 const App = () => {
   return (
-    <div className='min-h-screen w-full bg-black text-white'>
+    <div className='h-screen w-full bg-black text-white'>
       <Canvas>
         <mesh>
           <boxGeometry />
