@@ -26,7 +26,7 @@ const Experience = () => {
       >
         <boxGeometry args={[1, 1, 1]} />
         {/* <circleGeometry /> */}
-        <meshBasicMaterial ref={materialRef} color={"red"} />
+        <meshStandardMaterial ref={materialRef} color={"red"} metalness={0.7} roughness={0.1} />
       </mesh>
 
       {/* <Text >
