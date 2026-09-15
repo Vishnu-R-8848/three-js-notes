@@ -1,8 +1,8 @@
 import "./style.css";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import heroImage from "./assets/hero-img.jpg";
+import { GLTFLoader, RGBELoader } from "three/examples/jsm/Addons.js";
 
 // Scene & Canvas
 const canvas = document.querySelector("#webgl");
@@ -19,8 +19,26 @@ const rgbeLoader = new RGBELoader();
 rgbeLoader.load("./envMap.hdr", (texture) => {
   texture.mapping = THREE.EquirectangularReflectionMapping;
   scene.environment = texture;
-  scene.background = texture;
+  // scene.background = texture;
   // Optional: scene.background = texture; // if you want the HDRI visible in the skybox
+});
+
+let mixer = null;
+const loader = new GLTFLoader();
+loader.load("./model.glb", (gltf) => {
+  const model = gltf.scene;
+  model.position.y = -2.5;
+
+  mixer = new THREE.AnimationMixer(model);
+
+  const anim = gltf.animations[0];
+
+  const action = mixer.clipAction(anim);
+
+  action.play();
+
+  console.log(gltf);
+  scene.add(model);
 });
 
 // Camera
@@ -48,25 +66,25 @@ const material = new THREE.MeshStandardMaterial({
 });
 
 const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+// scene.add(cube);
 
-// Ambient Light
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
-scene.add(ambientLight);
+// // Ambient Light
+// const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+// scene.add(ambientLight);
 
-// Directional Light & Target
-const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-directionalLight.position.set(3, 4, 2);
-directionalLight.target = cube;
-scene.add(directionalLight.target);
-scene.add(directionalLight);
+// // Directional Light & Target
+// const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+// directionalLight.position.set(3, 4, 2);
+// directionalLight.target = cube;
+// scene.add(directionalLight.target);
+// scene.add(directionalLight);
 
-// Directional Light Helper (kept commented out)
-const directionalLightHelper = new THREE.DirectionalLightHelper(
-  directionalLight,
-  0.8,
-);
-// scene.add(directionalLightHelper);
+// // Directional Light Helper (kept commented out)
+// const directionalLightHelper = new THREE.DirectionalLightHelper(
+//   directionalLight,
+//   0.8,
+// );
+// // scene.add(directionalLightHelper);
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
@@ -87,9 +105,11 @@ const animate = (timestamp) => {
   timer.update(timestamp);
   const delta = timer.getDelta();
 
-  cube.rotation.x += 0.5 * delta;
-  cube.rotation.y += 0.5 * delta;
-  cube.rotation.z += 0.5 * delta;
+  // cube.rotation.x += 0.5 * delta;
+  // cube.rotation.y += 0.5 * delta;
+  // cube.rotation.z += 0.5 * delta;
+
+  if (mixer) mixer.update(delta * 1);
 
   controls.update();
   renderer.render(scene, camera);
